@@ -16,6 +16,8 @@ public abstract class AController
 
         if(view != null) 
         {
+            this.view.InitView(this);
+
             view.EventOnEnable += OnViewEnabled;
             view.EventOnDisable += OnViewDisabled;
 

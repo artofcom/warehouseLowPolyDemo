@@ -22,5 +22,5 @@ public class RobotView : AView
     {
         if(Input.GetMouseButtonDown(0)) 
             EventOnMouseClicked?.Invoke(Input.mousePosition);
-    }
+    }   
 }

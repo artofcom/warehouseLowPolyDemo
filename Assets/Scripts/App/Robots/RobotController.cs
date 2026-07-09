@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class RobotController : AController
+public class RobotController : AController, IRobotActor
 {
     RobotView View;
     Camera mainCam;
@@ -38,5 +38,19 @@ public class RobotController : AController
         {
             View.NavMeshAgent.SetDestination(hit.point);
         }
+    }
+
+    public void StartNavigation()
+    {
+        View.NavMeshAgent.SetDestination(new Vector3(-5.16f, 0.43f, 3.93f));
+    }
+
+    public void PickUp() 
+    { 
+        Debug.Log("[RobotCtrler] Picking Up......");
+    } 
+    public void DropDown() 
+    {
+        Debug.Log("[RobotCtrler] Drop Down.....");
     }
 }
