@@ -8,10 +8,10 @@ public class DropStationView : StationView
         
     }
 
-    protected override void OnRobotArrived(IRobotActor robot)
-    {
-        Debug.Log($"[DropStation] has Collied on the station!");
+    //protected override void OnRobotArrived(IRobotActor robot)
+   // {
+    //    Debug.Log($"[DropStation] has Collied on the station!");/
 
-        robot.DropDown();
-    }
+        //robot.DropDown();
+    //}
 }

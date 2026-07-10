@@ -1,6 +1,6 @@
 
 public interface IRobotActor 
 {
-    void PickUp();
-    void DropDown();
+    void PickUp(CargoComp cargo);
+    void DropDown(AModule dropOffStationModule);
 }

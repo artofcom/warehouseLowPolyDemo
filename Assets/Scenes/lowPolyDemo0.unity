@@ -243,6 +243,7 @@ GameObject:
   - component: {fileID: 156650569}
   - component: {fileID: 156650568}
   - component: {fileID: 156650567}
+  - component: {fileID: 156650570}
   m_Layer: 11
   m_Name: cargoBox00 (1)
   m_TagString: Untagged
@@ -259,11 +260,11 @@ Transform:
   m_GameObject: {fileID: 156650565}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.204, y: 1.021, z: 2.9}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: -0.0880003, y: 1.182, z: -2.07792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1160081177}
+  m_Father: {fileID: 1326507315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &156650567
 BoxCollider:
@@ -343,6 +344,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 156650565}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &156650570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156650565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 118b4966bf7d50f4698a39fd693856e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CargoComp
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,6 +565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FleetHandlerModule
   view: {fileID: 838842179}
   robotModule: {fileID: 1629087541}
+  stationModules:
+  - {fileID: 1398023354}
+  - {fileID: 862272542}
 --- !u!1 &331468461
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,7 +596,7 @@ Transform:
   m_GameObject: {fileID: 331468461}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8299999, y: 0.43, z: -2.03}
+  m_LocalPosition: {x: -1.8299999, y: 0.43, z: -3.12}
   m_LocalScale: {x: 2, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -772,7 +788,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.1704602, y: 0, z: 3.90792}
-  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 243540591}
@@ -822,7 +838,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.26666668
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 751e635ee277d0f419335fbdde8096df, type: 2}
   m_BuildHeightMesh: 0
@@ -1055,7 +1071,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StationModule
   view: {fileID: 2140451028}
-  cargoBoxes: []
 --- !u!1 &930430771
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,39 +1658,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1 &1160081176
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1160081177}
-  m_Layer: 0
-  m_Name: CargoBoxes
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1160081177
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160081176}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1326803124}
-  - {fileID: 156650566}
-  m_Father: {fileID: 1809230255}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1326507314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1708,7 +1690,9 @@ Transform:
   m_LocalPosition: {x: -5.16, y: 0.43, z: 3.93896}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1326803124}
+  - {fileID: 156650566}
   m_Father: {fileID: 38399111}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1326507317
@@ -1787,7 +1771,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5, y: 5, z: 5}
+  m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1326507321
 MonoBehaviour:
@@ -1813,6 +1797,7 @@ GameObject:
   - component: {fileID: 1326803127}
   - component: {fileID: 1326803126}
   - component: {fileID: 1326803125}
+  - component: {fileID: 1326803128}
   m_Layer: 11
   m_Name: cargoBox00
   m_TagString: Untagged
@@ -1829,11 +1814,11 @@ Transform:
   m_GameObject: {fileID: 1326803123}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.204, y: 0.43, z: 2.9}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: -0.0880003, y: 0, z: -2.07792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1160081177}
+  m_Father: {fileID: 1326507315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1326803125
 BoxCollider:
@@ -1913,6 +1898,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326803123}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1326803128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326803123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 118b4966bf7d50f4698a39fd693856e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CargoComp
 --- !u!1 &1398023352
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,9 +1955,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StationModule
   view: {fileID: 1326507321}
-  cargoBoxes:
-  - {fileID: 1326803123}
-  - {fileID: 156650565}
 --- !u!1 &1544728036
 GameObject:
   m_ObjectHideFlags: 0
@@ -2417,7 +2411,7 @@ Transform:
   m_GameObject: {fileID: 1789313829}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.1, y: 0, z: 0}
+  m_LocalPosition: {x: 41.37, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2455,7 +2449,6 @@ Transform:
   - {fileID: 243540591}
   - {fileID: 1643299074}
   - {fileID: 38399111}
-  - {fileID: 1160081177}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2025888907
@@ -2486,7 +2479,7 @@ Transform:
   m_GameObject: {fileID: 2025888907}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.11000013, y: 0.43, z: 7.58}
+  m_LocalPosition: {x: 0.11000013, y: 0.43, z: 8.78}
   m_LocalScale: {x: 8, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

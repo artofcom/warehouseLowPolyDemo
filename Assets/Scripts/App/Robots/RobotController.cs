@@ -42,15 +42,30 @@ public class RobotController : AController, IRobotActor
 
     public void StartNavigation()
     {
-        View.NavMeshAgent.SetDestination(new Vector3(-5.16f, 0.43f, 3.93f));
+        var vPickUpStationPos = (Vector3)context.GetData("PickUpStationPos");// as Vector3;
+        View.NavMeshAgent.SetDestination(vPickUpStationPos);// new Vector3(-5.16f, 0.43f, 3.93f));
     }
 
-    public void PickUp() 
+    public void PickUp(CargoComp cargo) 
     { 
         Debug.Log("[RobotCtrler] Picking Up......");
+
+        if(cargo != null)
+        {
+            cargo.transform.SetParent(View.transform,  true);
+            cargo.transform.localPosition = new Vector3(.0f, 1.5f, .0f);// Vector3.zero;
+
+            View.NavMeshAgent.SetDestination( (Vector3)context.GetData("DropOffStationPos") );
+        }
     } 
-    public void DropDown() 
+    public void DropDown(AModule dropOffStationModule) 
     {
         Debug.Log("[RobotCtrler] Drop Down.....");
+
+
+        var station = dropOffStationModule as StationModule;
+        if(station != null) 
+            station.UnloadItem(View.transform.GetChild(0));
+
     }
 }
