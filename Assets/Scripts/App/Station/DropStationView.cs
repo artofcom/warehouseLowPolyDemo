@@ -8,10 +8,10 @@ public class DropStationView : StationView
         
     }
 
-    //protected override void OnRobotArrived(IRobotActor robot)
-   // {
-    //    Debug.Log($"[DropStation] has Collied on the station!");/
 
-        //robot.DropDown();
-    //}
+    public void UnloadCargo(CargoComp cargoComp)
+    {
+        cargoComp.transform.SetParent(transform, false);
+        cargoComp.transform.localPosition = new Vector3(.0f, 1.0f, 0.3f);
+    }
 }

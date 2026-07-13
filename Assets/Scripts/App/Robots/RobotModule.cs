@@ -13,8 +13,6 @@ public class RobotModule : AModule
         base.Dispose();
     }
 
-
-
     public void StartNavigation()
     {
        (controller as RobotController).StartNavigation();

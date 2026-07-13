@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class RobotView : AView
@@ -23,4 +24,12 @@ public class RobotView : AView
         if(Input.GetMouseButtonDown(0)) 
             EventOnMouseClicked?.Invoke(Input.mousePosition);
     }   
+
+    public void LoadCargo(CargoComp cargo)
+    {
+        Assert.IsNotNull(cargo);
+
+        cargo.transform.SetParent(this.transform,  true);
+        cargo.transform.localPosition = new Vector3(.0f, 1.5f, .0f);
+    }
 }

@@ -9,12 +9,12 @@ public class PickupStationView : StationView
         
     }
 
-    protected override void OnRobotArrived(IRobotActor robot)
+  /*  protected override void OnRobotArrived(IRobotActor robot)
     {
         Debug.Log($"[PIckUpStation] has Collied on the station!");
         
         base.OnRobotArrived(robot);
 
         // robot.PickUp();
-    }
+    }*/
 }

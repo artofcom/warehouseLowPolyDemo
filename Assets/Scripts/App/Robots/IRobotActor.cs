@@ -1,6 +1,7 @@
 
-public interface IRobotActor 
+public interface IRobotActor
 {
-    void PickUp(CargoComp cargo);
-    void DropDown(AModule dropOffStationModule);
+    void PickUp(ITransportable transportable);
+    ITransportable GetCargo();
+    void UnloadCargo();
 }

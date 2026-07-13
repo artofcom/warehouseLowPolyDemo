@@ -6,6 +6,8 @@ public class RobotController : AController, IRobotActor
     RobotView View;
     Camera mainCam;
 
+    ITransportable cargoCache = null;
+
     public RobotController(AContext ctx, AModel model, AView view) : base(ctx, model, view)
     {
         View = view as RobotView;   
@@ -46,26 +48,24 @@ public class RobotController : AController, IRobotActor
         View.NavMeshAgent.SetDestination(vPickUpStationPos);// new Vector3(-5.16f, 0.43f, 3.93f));
     }
 
-    public void PickUp(CargoComp cargo) 
+    public void PickUp(ITransportable cargo) 
     { 
         Debug.Log("[RobotCtrler] Picking Up......");
 
         if(cargo != null)
         {
-            cargo.transform.SetParent(View.transform,  true);
-            cargo.transform.localPosition = new Vector3(.0f, 1.5f, .0f);// Vector3.zero;
-
+            this.cargoCache = cargo;
+            View.LoadCargo(cargo as CargoComp);
             View.NavMeshAgent.SetDestination( (Vector3)context.GetData("DropOffStationPos") );
         }
     } 
-    public void DropDown(AModule dropOffStationModule) 
+    public ITransportable GetCargo()
     {
-        Debug.Log("[RobotCtrler] Drop Down.....");
-
-
-        var station = dropOffStationModule as StationModule;
-        if(station != null) 
-            station.UnloadItem(View.transform.GetChild(0));
-
+        return this.cargoCache;
+    }
+    public void UnloadCargo()
+    {
+        this.cargoCache = null;
+        // View.transform
     }
 }

@@ -1,15 +1,9 @@
 using UnityEngine;
 
-public class CargoComp : MonoBehaviour, IMovable
+public class CargoComp : MonoBehaviour, ITransportable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
     {
         
     }
