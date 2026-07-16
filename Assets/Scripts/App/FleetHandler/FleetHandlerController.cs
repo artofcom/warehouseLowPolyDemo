@@ -1,9 +1,11 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class FleetHandlerController : AController
 {
     FleetHandlerView View;
+
+    int nextMissionId = 1;
+
     public FleetHandlerController(AContext ctx, AModel model, AView view) : base(ctx, model, view)
     {
         View = view as FleetHandlerView;
@@ -11,13 +13,17 @@ public class FleetHandlerController : AController
         View.EventOnBtnStartClicked += OnBtnStartClicked;
     }
 
-    // Dispose() {}
-
     public void OnBtnStartClicked()
     {
-        RobotModule robotModule = context.GetData("Robot") as RobotModule;
-        Assert.IsNotNull(robotModule);
+        var handler = context.GetData("MessageHandler") as IMessageHandler;
+        if(handler == null)
+        {
+            Debug.LogWarning("[FleetHandler] MessageHandler not available.");
+            return;
+        }
 
-        robotModule.StartNavigation();
+        // Build the transport job in code and dispatch it as a message.
+        var mission = MissionFactory.CreateTransport(nextMissionId++, StationId.PickUp, StationId.DropOff);
+        handler.Dispatch(mission);
     }
 }

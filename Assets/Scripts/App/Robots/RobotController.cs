@@ -1,71 +1,165 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 
-public class RobotController : AController, IRobotActor
+public class RobotController : AController, IMissionReceiver
 {
     RobotView View;
+    RobotModel Model;
     Camera mainCam;
 
-    ITransportable cargoCache = null;
+    IMessageHandler messageHandler;
+    IStationLocator stationLocator;
 
     public RobotController(AContext ctx, AModel model, AView view) : base(ctx, model, view)
     {
-        View = view as RobotView;   
+        View = view as RobotView;
+        Model = model as RobotModel;
     }
 
     protected override void OnViewEnabled()
     {
+        View.EventOnMouseClicked -= OnMouseClicked;
         View.EventOnMouseClicked += OnMouseClicked;
+
+        View.EventOnDestinationReached -= OnDestinationReached;
+        View.EventOnDestinationReached += OnDestinationReached;
+
+        if(messageHandler == null)
+        {
+            messageHandler = context.GetData("MessageHandler") as IMessageHandler;
+            messageHandler?.Register(this);
+        }
     }
 
-    protected override void OnViewDisabled() 
+    protected override void OnViewDisabled()
     {
         View.EventOnMouseClicked -= OnMouseClicked;
+        View.EventOnDestinationReached -= OnDestinationReached;
+
+        messageHandler?.Unregister(this);
+        messageHandler = null;
     }
 
+    IStationLocator Locator
+    {
+        get
+        {
+            if(stationLocator == null)
+                stationLocator = context.GetData("StationLocator") as IStationLocator;
+            return stationLocator;
+        }
+    }
 
     void OnMouseClicked(Vector3 vPos)
     {
-        Debug.Log("[Robot] Mouse Clicked...");
-
         if(mainCam == null)
         {
             mainCam = context.GetData("MainCam") as Camera;
-            Assert.IsNotNull(mainCam);
+            if(mainCam == null)
+                return;
         }
 
         Ray ray = mainCam.ScreenPointToRay(vPos);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit))
+        if(Physics.Raycast(ray, out RaycastHit hit))
+            View.MoveTo(hit.point);
+    }
+
+    // ---- IMissionReceiver ----
+
+    public void OnMissionAssigned(RobotMission mission)
+    {
+        Debug.Log("[RobotCtrler] Mission assigned.");
+
+        Model.AssignMission(mission);
+        ExecuteCurrentCommand();
+    }
+
+    // ---- Mission executor ----
+
+    void ExecuteCurrentCommand()
+    {
+        if(!Model.HasActiveMission)
+            return;
+
+        var cmd = Model.CurrentCommand;
+        if(cmd == null)
+            return;
+
+        switch(cmd.Action)
         {
-            View.NavMeshAgent.SetDestination(hit.point);
+            case RobotActionType.MoveTo:
+                MoveToTarget(cmd);
+                break;                  // completion handled by arrival event
+
+            case RobotActionType.PickUp:
+                DoPickUp(cmd);
+                AdvanceAndExecute();
+                break;
+
+            case RobotActionType.DropOff:
+                DoDropOff(cmd);
+                AdvanceAndExecute();
+                break;
+
+            case RobotActionType.Wait:
+            default:
+                AdvanceAndExecute();
+                break;
         }
     }
 
-    public void StartNavigation()
+    void OnDestinationReached()
     {
-        var vPickUpStationPos = (Vector3)context.GetData("PickUpStationPos");// as Vector3;
-        View.NavMeshAgent.SetDestination(vPickUpStationPos);// new Vector3(-5.16f, 0.43f, 3.93f));
+        if(!Model.HasActiveMission)
+            return;
+
+        var cmd = Model.CurrentCommand;
+        if(cmd == null || cmd.Action != RobotActionType.MoveTo)
+            return;
+
+        View.StopMovement();
+        AdvanceAndExecute();
     }
 
-    public void PickUp(ITransportable cargo) 
-    { 
-        Debug.Log("[RobotCtrler] Picking Up......");
+    void AdvanceAndExecute()
+    {
+        if(Model.MoveToNextCommand())
+            ExecuteCurrentCommand();
+        else
+            Debug.Log("[RobotCtrler] Mission completed.");
+    }
 
+    void MoveToTarget(RobotCommand cmd)
+    {
+        if(Locator == null)
+        {
+            Debug.LogWarning("[RobotCtrler] StationLocator not available.");
+            return;
+        }
+
+        View.MoveTo(Locator.GetPosition(cmd.Target));
+    }
+
+    void DoPickUp(RobotCommand cmd)
+    {
+        var cargo = Locator?.GetService(cmd.Target)?.TakeCargo(cmd.CargoTag);
         if(cargo != null)
         {
-            this.cargoCache = cargo;
-            View.LoadCargo(cargo as CargoComp);
-            View.NavMeshAgent.SetDestination( (Vector3)context.GetData("DropOffStationPos") );
+            View.LoadCargo(cargo);
+            Model.SetCarriedCargo(cargo);
         }
-    } 
-    public ITransportable GetCargo()
-    {
-        return this.cargoCache;
+        else
+        {
+            Debug.Log("[RobotCtrler] No available cargo to pick up.");
+        }
     }
-    public void UnloadCargo()
+
+    void DoDropOff(RobotCommand cmd)
     {
-        this.cargoCache = null;
-        // View.transform
+        var cargo = Model.CarriedCargo;
+        if(cargo == null)
+            return;
+
+        Locator?.GetService(cmd.Target)?.ReceiveCargo(cargo);
+        Model.SetCarriedCargo(null);
     }
 }

@@ -12,7 +12,7 @@ public class FleetHandlerModule : AModule
     public override void Init(AContext ctx)
     {
         context = ctx as Context;
-        ctx.UpdateData("Robot", robotModule);
+
         var model = new FleetHandlerModel();
         controller = new FleetHandlerController(ctx, model, view);
         
@@ -21,10 +21,17 @@ public class FleetHandlerModule : AModule
 
     async void DeferedInit()
     {
+        // Wait so station transforms are settled before reading positions.
         await Task.Delay(100);
 
-        context.UpdateData("PickUpStationPos", stationModules[0].GetViewPosition());
-        context.UpdateData("DropOffStationPos", stationModules[1].GetViewPosition());
+        // Index convention: [0] = pickup, [1] = dropoff.
+        var map = new Dictionary<StationId, StationModule>();
+        if(stationModules != null && stationModules.Count > 0)
+            map[StationId.PickUp] = stationModules[0];
+        if(stationModules != null && stationModules.Count > 1)
+            map[StationId.DropOff] = stationModules[1];
+
+        context.UpdateData("StationLocator", new StationLocator(map));
     }
 
     public override void Dispose()

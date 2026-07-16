@@ -1,20 +1,26 @@
 using UnityEngine;
-using System;
 
 public class PickupStationView : StationView
 {
+    [SerializeField] Transform cargoRoot;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-  /*  protected override void OnRobotArrived(IRobotActor robot)
+    public CargoComp GetAvailableCargo()
     {
-        Debug.Log($"[PIckUpStation] has Collied on the station!");
-        
-        base.OnRobotArrived(robot);
+        if(cargoRoot == null)
+            return null;
 
-        // robot.PickUp();
-    }*/
+        for(int q = 0; q < cargoRoot.childCount; ++q)
+        {
+            var compCargo = cargoRoot.GetChild(q).GetComponent<CargoComp>();
+            if(compCargo != null)
+                return compCargo;
+        }
+        return null;
+    }
 }
